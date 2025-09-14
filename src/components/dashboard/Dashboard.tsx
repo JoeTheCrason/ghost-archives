@@ -38,14 +38,14 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const stored = localStorage.getItem("shadowvault_games");
+    const stored = localStorage.getItem("incognitobox_games");
     if (stored) {
       setGameLinks(JSON.parse(stored));
     }
   }, []);
 
   const saveToStorage = (links: GameLink[]) => {
-    localStorage.setItem("shadowvault_games", JSON.stringify(links));
+    localStorage.setItem("incognitobox_games", JSON.stringify(links));
     setGameLinks(links);
   };
 
@@ -76,7 +76,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
     toast({
       title: "Game Added",
-      description: `${newTitle} has been secured in the vault`,
+      description: `${newTitle} has been secured in the box`,
     });
   };
 
@@ -85,7 +85,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     saveToStorage(updatedLinks);
     toast({
       title: "Game Removed",
-      description: "Link has been deleted from the vault",
+      description: "Link has been deleted from the box",
     });
   };
 
@@ -97,7 +97,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   const categories = Array.from(new Set(gameLinks.map(game => game.category)));
 
   const handleLogout = () => {
-    localStorage.removeItem("shadowvault_authenticated");
+    localStorage.removeItem("incognitobox_authenticated");
     onLogout();
   };
 
@@ -113,9 +113,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                ShadowVault
+                IncognitoBox
               </h1>
-              <p className="text-sm text-muted-foreground">Secure Gaming Archive</p>
+              <p className="text-sm text-muted-foreground">Anonymous Gaming Archive</p>
             </div>
           </div>
           
@@ -130,7 +130,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               className="border-vault-border hover:bg-destructive/10 hover:border-destructive"
             >
               <LogOut className="h-4 w-4 mr-2" />
-              Exit Vault
+              Exit Box
             </Button>
           </div>
         </div>
@@ -186,7 +186,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 className="w-full bg-primary hover:bg-primary/90"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Secure Game
+                Store Game
               </Button>
             </CardContent>
           </Card>
@@ -197,7 +197,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <Gamepad2 className="h-5 w-5 text-primary" />
-                  Secured Games
+                  Stored Games
                 </CardTitle>
                 <div className="relative w-64">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -215,7 +215,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 <div className="text-center py-12 text-muted-foreground">
                   <Gamepad2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   {gameLinks.length === 0 ? (
-                    <p>No games secured yet. Add your first game to get started.</p>
+                    <p>No games stored yet. Add your first game to get started.</p>
                   ) : (
                     <p>No games match your search criteria.</p>
                   )}
@@ -238,7 +238,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                           {game.url}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Secured: {new Date(game.addedAt).toLocaleDateString()}
+                          Stored: {new Date(game.addedAt).toLocaleDateString()}
                         </p>
                       </div>
                       

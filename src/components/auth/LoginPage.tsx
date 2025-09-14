@@ -25,10 +25,10 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (username === "hitman" && password === "18074478") {
-      localStorage.setItem("shadowvault_authenticated", "true");
+      localStorage.setItem("incognitobox_authenticated", "true");
       toast({
         title: "Access Granted",
-        description: "Welcome to ShadowVault",
+        description: "Welcome to IncognitoBox",
       });
       onLogin();
     } else {
@@ -63,10 +63,10 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
           </div>
           <div>
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              ShadowVault
+              IncognitoBox
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Secure Gaming Archive
+              Anonymous Gaming Archive
             </CardDescription>
           </div>
         </CardHeader>
