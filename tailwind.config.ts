@@ -47,6 +47,12 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        vault: {
+          glow: "hsl(var(--vault-glow))",
+          dark: "hsl(var(--vault-dark))",
+          darker: "hsl(var(--vault-darker))",
+          border: "hsl(var(--vault-border))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
