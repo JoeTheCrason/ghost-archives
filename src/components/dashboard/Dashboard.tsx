@@ -51,57 +51,57 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     if (storedGames) {
       setGameLinks(JSON.parse(storedGames));
     } else {
-      // Initialize with default game links
+      // Initialize with default game links - all categorized as "Proxies and Games"
       const defaultGameLinks: WebsiteLink[] = [
-        { id: "1", title: "Xen Desmos", url: "https://xen.desmos.lol.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "2", title: "Xen Google Drive", url: "https://xen.googledrive.icu.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "3", title: "Xen Prodigy", url: "https://xen.prodigy.it.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "4", title: "Xen Student Vue", url: "https://xen.studentvue.my.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "5", title: "NB Desmos Graphing", url: "https://nb.desmosgraphing.xyz.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "6", title: "NB GoGuardian", url: "https://nb.goguardian.pro.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "7", title: "NB Prodigy", url: "https://nb.prodigy.it.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "8", title: "NB Stay in School", url: "https://nb.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "9", title: "TB DeltaMath", url: "https://tb.deltamath.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "10", title: "TB Desmos", url: "https://tb.desmos.lol.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "11", title: "TB EdPuzzle", url: "https://tb.edpuzzle.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "12", title: "TB GoGuardian", url: "https://tb.goguardian.pro.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "13", title: "TB Google Drive", url: "https://tb.googledrive.icu.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "14", title: "TB Prodigy", url: "https://tb.prodigy.it.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "15", title: "TB Student Vue", url: "https://tb.studentvue.my.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "16", title: "DDX DeltaMath", url: "https://ddx.deltamath.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "17", title: "DDX Desmos Graphing", url: "https://ddx.desmosgraphing.xyz.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "18", title: "DDX EdPuzzle", url: "https://ddx.edpuzzle.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "19", title: "DDX GoGuardian", url: "https://ddx.goguardian.pro.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "20", title: "DDX Google Drive", url: "https://ddx.googledrive.icu.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "21", title: "DDX Nearpod", url: "https://ddx.nearpod.lol.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "22", title: "DDX Stay in School", url: "https://ddx.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "23", title: "DDX Student Vue", url: "https://ddx.studentvue.my.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "24", title: "Lunar DeltaMath", url: "https://lunar.deltamath.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "25", title: "Lunar Desmos", url: "https://lunar.desmos.lol.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "26", title: "Lunar EdPuzzle", url: "https://lunar.edpuzzle.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "27", title: "Lunar GoGuardian", url: "https://lunar.goguardian.pro.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "28", title: "Lunar Google Drive", url: "https://lunar.googledrive.icu.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "29", title: "Lunar Nearpod", url: "https://lunar.nearpod.lol.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "30", title: "Lunar Prodigy", url: "https://lunar.prodigy.it.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "31", title: "Lunar Stay in School", url: "https://lunar.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "32", title: "Lunar Student Vue", url: "https://lunar.studentvue.my.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "33", title: "Space DeltaMath", url: "https://space.deltamath.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "34", title: "Space Desmos Graphing", url: "https://space.desmosgraphing.xyz.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "35", title: "Space EdPuzzle", url: "https://space.edpuzzle.icu.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "36", title: "Space GoGuardian", url: "https://space.goguardian.pro.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "37", title: "Space Google Drive", url: "https://space.googledrive.icu.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "38", title: "Space Nearpod", url: "https://space.nearpod.lol.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "39", title: "Space Prodigy", url: "https://space.prodigy.it.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "40", title: "Space Stay in School", url: "https://space.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "41", title: "Space Student Vue", url: "https://space.studentvue.my.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "42", title: "Super GIS Fire", url: "https://supergisfire.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "43", title: "Pete Zahbare", url: "https://petezahbare.adidasnmdcitysock.com.cdn.cloudflare.net", category: "Games", addedAt: new Date().toISOString() },
-        { id: "44", title: "Waves Lat", url: "https://waves.lat.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "45", title: "Wis Sentt", url: "https://wis.sentt.lol.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "46", title: "Macha", url: "https://macha.icu.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "47", title: "Use Waves", url: "https://usewaves.site.cdn.cloudflare.net", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "48", title: "Africa IT Group", url: "https://africa.itafricagroup.com", category: "Proxies", addedAt: new Date().toISOString() },
-        { id: "49", title: "Suicide Hotline Prevention", url: "https://suicidehotlineprevention.itafricagroup.com", category: "Proxies", addedAt: new Date().toISOString() }
+        { id: "1", title: "Xen Desmos", url: "https://xen.desmos.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "2", title: "Xen Google Drive", url: "https://xen.googledrive.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "3", title: "Xen Prodigy", url: "https://xen.prodigy.it.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "4", title: "Xen Student Vue", url: "https://xen.studentvue.my.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "5", title: "NB Desmos Graphing", url: "https://nb.desmosgraphing.xyz.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "6", title: "NB GoGuardian", url: "https://nb.goguardian.pro.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "7", title: "NB Prodigy", url: "https://nb.prodigy.it.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "8", title: "NB Stay in School", url: "https://nb.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "9", title: "TB DeltaMath", url: "https://tb.deltamath.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "10", title: "TB Desmos", url: "https://tb.desmos.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "11", title: "TB EdPuzzle", url: "https://tb.edpuzzle.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "12", title: "TB GoGuardian", url: "https://tb.goguardian.pro.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "13", title: "TB Google Drive", url: "https://tb.googledrive.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "14", title: "TB Prodigy", url: "https://tb.prodigy.it.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "15", title: "TB Student Vue", url: "https://tb.studentvue.my.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "16", title: "DDX DeltaMath", url: "https://ddx.deltamath.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "17", title: "DDX Desmos Graphing", url: "https://ddx.desmosgraphing.xyz.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "18", title: "DDX EdPuzzle", url: "https://ddx.edpuzzle.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "19", title: "DDX GoGuardian", url: "https://ddx.goguardian.pro.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "20", title: "DDX Google Drive", url: "https://ddx.googledrive.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "21", title: "DDX Nearpod", url: "https://ddx.nearpod.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "22", title: "DDX Stay in School", url: "https://ddx.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "23", title: "DDX Student Vue", url: "https://ddx.studentvue.my.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "24", title: "Lunar DeltaMath", url: "https://lunar.deltamath.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "25", title: "Lunar Desmos", url: "https://lunar.desmos.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "26", title: "Lunar EdPuzzle", url: "https://lunar.edpuzzle.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "27", title: "Lunar GoGuardian", url: "https://lunar.goguardian.pro.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "28", title: "Lunar Google Drive", url: "https://lunar.googledrive.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "29", title: "Lunar Nearpod", url: "https://lunar.nearpod.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "30", title: "Lunar Prodigy", url: "https://lunar.prodigy.it.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "31", title: "Lunar Stay in School", url: "https://lunar.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "32", title: "Lunar Student Vue", url: "https://lunar.studentvue.my.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "33", title: "Space DeltaMath", url: "https://space.deltamath.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "34", title: "Space Desmos Graphing", url: "https://space.desmosgraphing.xyz.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "35", title: "Space EdPuzzle", url: "https://space.edpuzzle.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "36", title: "Space GoGuardian", url: "https://space.goguardian.pro.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "37", title: "Space Google Drive", url: "https://space.googledrive.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "38", title: "Space Nearpod", url: "https://space.nearpod.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "39", title: "Space Prodigy", url: "https://space.prodigy.it.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "40", title: "Space Stay in School", url: "https://space.stayinschooleducation.org.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "41", title: "Space Student Vue", url: "https://space.studentvue.my.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "42", title: "Super GIS Fire", url: "https://supergisfire.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "43", title: "Pete Zahbare", url: "https://petezahbare.adidasnmdcitysock.com.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "44", title: "Waves Lat", url: "https://waves.lat.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "45", title: "Wis Sentt", url: "https://wis.sentt.lol.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "46", title: "Macha", url: "https://macha.icu.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "47", title: "Use Waves", url: "https://usewaves.site.cdn.cloudflare.net", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "48", title: "Africa IT Group", url: "https://africa.itafricagroup.com", category: "Proxies and Games", addedAt: new Date().toISOString() },
+        { id: "49", title: "Suicide Hotline Prevention", url: "https://suicidehotlineprevention.itafricagroup.com", category: "Proxies and Games", addedAt: new Date().toISOString() }
       ];
       setGameLinks(defaultGameLinks);
       localStorage.setItem("vaultvision_games", JSON.stringify(defaultGameLinks));
@@ -109,6 +109,19 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     
     if (storedApps) {
       setAppLinks(JSON.parse(storedApps));
+    } else {
+      // Initialize with Security Scope app
+      const defaultApps: WebsiteLink[] = [
+        { 
+          id: "security-scope-1", 
+          title: "Security Scope", 
+          url: "#", 
+          category: "Security", 
+          addedAt: new Date().toISOString()
+        }
+      ];
+      setAppLinks(defaultApps);
+      localStorage.setItem("vaultvision_apps", JSON.stringify(defaultApps));
     }
   }, []);
 
@@ -276,9 +289,24 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                           {link.category}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {link.url}
-                      </p>
+                      {link.id === "security-scope-1" ? (
+                        <div className="mb-2">
+                          <div className="flex items-center gap-2 mb-2 p-3 bg-black rounded-md border border-green-500/30">
+                            <div className="relative">
+                              <Shield className="h-6 w-6 text-green-500" />
+                              <Lock className="h-3 w-3 text-green-500 absolute -bottom-0.5 -right-0.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-green-400">Security Scope</p>
+                              <p className="text-xs text-green-300">Professional domain security analysis powered by Lightspeed and FortiGuard filtering systems. Instantly verify domain safety and categorization.</p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-muted-foreground truncate">
+                          {link.url}
+                        </p>
+                      )}
                       <p className="text-xs text-muted-foreground mt-1">
                         Stored: {new Date(link.addedAt).toLocaleDateString()}
                       </p>
@@ -288,8 +316,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => window.open(link.url, '_blank')}
+                        onClick={() => link.id === "security-scope-1" ? null : window.open(link.url, '_blank')}
                         className="border-primary/20 hover:bg-primary/10"
+                        disabled={link.id === "security-scope-1"}
                       >
                         <ExternalLink className="h-4 w-4" />
                       </Button>
