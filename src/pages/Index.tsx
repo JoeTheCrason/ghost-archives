@@ -6,7 +6,7 @@ const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const auth = localStorage.getItem("incognitobox_authenticated");
+    const auth = localStorage.getItem("vaultvision_authenticated");
     setIsAuthenticated(auth === "true");
   }, []);
 

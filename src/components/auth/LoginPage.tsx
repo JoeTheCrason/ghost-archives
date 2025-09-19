@@ -25,10 +25,10 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (username === "hitman" && password === "18074478") {
-      localStorage.setItem("incognitobox_authenticated", "true");
+      localStorage.setItem("vaultvision_authenticated", "true");
       toast({
         title: "Access Granted",
-        description: "Welcome to IncognitoBox",
+        description: "Welcome to Vault Vision",
       });
       onLogin();
     } else {
@@ -62,11 +62,11 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
             </div>
           </div>
           <div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              IncognitoBox
+            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-mono">
+              VVV
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Anonymous Gaming Archive
+              Vault Vision Version 1
             </CardDescription>
           </div>
         </CardHeader>

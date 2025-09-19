@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, 
   Plus, 
@@ -13,11 +13,16 @@ import {
   Search, 
   LogOut,
   Gamepad2,
-  Lock
+  Lock,
+  Smartphone,
+  ShoppingCart,
+  FileText,
+  Info,
+  Megaphone
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-interface GameLink {
+interface WebsiteLink {
   id: string;
   title: string;
   url: string;
@@ -30,26 +35,36 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
-  const [gameLinks, setGameLinks] = useState<GameLink[]>([]);
+  const [gameLinks, setGameLinks] = useState<WebsiteLink[]>([]);
+  const [appLinks, setAppLinks] = useState<WebsiteLink[]>([]);
   const [newTitle, setNewTitle] = useState("");
   const [newUrl, setNewUrl] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState("announcements");
   const { toast } = useToast();
 
   useEffect(() => {
-    const stored = localStorage.getItem("incognitobox_games");
-    if (stored) {
-      setGameLinks(JSON.parse(stored));
+    const storedGames = localStorage.getItem("vaultvision_games");
+    const storedApps = localStorage.getItem("vaultvision_apps");
+    if (storedGames) {
+      setGameLinks(JSON.parse(storedGames));
+    }
+    if (storedApps) {
+      setAppLinks(JSON.parse(storedApps));
     }
   }, []);
 
-  const saveToStorage = (links: GameLink[]) => {
-    localStorage.setItem("incognitobox_games", JSON.stringify(links));
-    setGameLinks(links);
+  const saveToStorage = (links: WebsiteLink[], type: 'games' | 'apps') => {
+    localStorage.setItem(`vaultvision_${type}`, JSON.stringify(links));
+    if (type === 'games') {
+      setGameLinks(links);
+    } else {
+      setAppLinks(links);
+    }
   };
 
-  const addGameLink = () => {
+  const addWebsiteLink = (type: 'games' | 'apps') => {
     if (!newTitle || !newUrl) {
       toast({
         title: "Incomplete Data",
@@ -59,7 +74,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       return;
     }
 
-    const newLink: GameLink = {
+    const newLink: WebsiteLink = {
       id: Date.now().toString(),
       title: newTitle,
       url: newUrl,
@@ -67,217 +82,186 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       addedAt: new Date().toISOString(),
     };
 
-    const updatedLinks = [...gameLinks, newLink];
-    saveToStorage(updatedLinks);
+    const currentLinks = type === 'games' ? gameLinks : appLinks;
+    const updatedLinks = [...currentLinks, newLink];
+    saveToStorage(updatedLinks, type);
 
     setNewTitle("");
     setNewUrl("");
     setNewCategory("");
 
     toast({
-      title: "Game Added",
-      description: `${newTitle} has been secured in the box`,
+      title: `${type === 'games' ? 'Game' : 'App'} Added`,
+      description: `${newTitle} has been secured in the vault`,
     });
   };
 
-  const removeGameLink = (id: string) => {
-    const updatedLinks = gameLinks.filter(link => link.id !== id);
-    saveToStorage(updatedLinks);
+  const removeWebsiteLink = (id: string, type: 'games' | 'apps') => {
+    const currentLinks = type === 'games' ? gameLinks : appLinks;
+    const updatedLinks = currentLinks.filter(link => link.id !== id);
+    saveToStorage(updatedLinks, type);
     toast({
-      title: "Game Removed",
-      description: "Link has been deleted from the box",
+      title: `${type === 'games' ? 'Game' : 'App'} Removed`,
+      description: "Link has been deleted from the vault",
     });
   };
-
-  const filteredGames = gameLinks.filter(game =>
-    game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    game.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const categories = Array.from(new Set(gameLinks.map(game => game.category)));
 
   const handleLogout = () => {
-    localStorage.removeItem("incognitobox_authenticated");
+    localStorage.removeItem("vaultvision_authenticated");
     onLogout();
   };
 
-  return (
-    <div className="min-h-screen bg-background p-6">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Shield className="h-8 w-8 text-primary" />
-              <Lock className="h-4 w-4 text-primary absolute -bottom-1 -right-1" />
+  const LinkManagementSection = ({ links, type }: { links: WebsiteLink[], type: 'games' | 'apps' }) => {
+    const filteredLinks = links.filter(link =>
+      link.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      link.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const categories = Array.from(new Set(links.map(link => link.category)));
+
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Add New Link */}
+        <Card className="lg:col-span-1 bg-card/90 border-vault-border">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus className="h-5 w-5 text-primary" />
+              Add New {type === 'games' ? 'Game' : 'App'}
+            </CardTitle>
+            <CardDescription>
+              Secure a new unblocked {type === 'games' ? 'game' : 'app'} link
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">{type === 'games' ? 'Game' : 'App'} Title</Label>
+              <Input
+                id="title"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder={`Enter ${type === 'games' ? 'game' : 'app'} name`}
+                className="bg-secondary/50 border-vault-border"
+              />
             </div>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                IncognitoBox
-              </h1>
-              <p className="text-sm text-muted-foreground">Anonymous Gaming Archive</p>
+            
+            <div className="space-y-2">
+              <Label htmlFor="url">{type === 'games' ? 'Game' : 'App'} URL</Label>
+              <Input
+                id="url"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                placeholder="https://..."
+                className="bg-secondary/50 border-vault-border"
+              />
             </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-              <Gamepad2 className="h-3 w-3 mr-1" />
-              {gameLinks.length} Games Secured
-            </Badge>
+            
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <Input
+                id="category"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                placeholder={type === 'games' ? "Action, Puzzle, etc." : "Productivity, Social, etc."}
+                className="bg-secondary/50 border-vault-border"
+              />
+            </div>
+            
             <Button 
-              variant="outline" 
-              onClick={handleLogout}
-              className="border-vault-border hover:bg-destructive/10 hover:border-destructive"
+              onClick={() => addWebsiteLink(type)} 
+              className="w-full bg-primary hover:bg-primary/90"
             >
-              <LogOut className="h-4 w-4 mr-2" />
-              Exit Box
+              <Plus className="h-4 w-4 mr-2" />
+              Store {type === 'games' ? 'Game' : 'App'}
             </Button>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Add New Game */}
-          <Card className="lg:col-span-1 bg-card/90 border-vault-border">
-            <CardHeader>
+        {/* Links List */}
+        <Card className="lg:col-span-2 bg-card/90 border-vault-border">
+          <CardHeader>
+            <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
-                <Plus className="h-5 w-5 text-primary" />
-                Add New Game
+                {type === 'games' ? <Gamepad2 className="h-5 w-5 text-primary" /> : <Smartphone className="h-5 w-5 text-primary" />}
+                Stored {type === 'games' ? 'Games' : 'Apps'}
               </CardTitle>
-              <CardDescription>
-                Secure a new unblocked game link
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Game Title</Label>
+              <div className="relative w-64">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="title"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="Enter game name"
-                  className="bg-secondary/50 border-vault-border"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder={`Search ${type}...`}
+                  className="pl-10 bg-secondary/50 border-vault-border"
                 />
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="url">Game URL</Label>
-                <Input
-                  id="url"
-                  value={newUrl}
-                  onChange={(e) => setNewUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="bg-secondary/50 border-vault-border"
-                />
+            </div>
+          </CardHeader>
+          <CardContent>
+            {filteredLinks.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                {type === 'games' ? <Gamepad2 className="h-12 w-12 mx-auto mb-4 opacity-50" /> : <Smartphone className="h-12 w-12 mx-auto mb-4 opacity-50" />}
+                {links.length === 0 ? (
+                  <p>No {type} stored yet. Add your first {type === 'games' ? 'game' : 'app'} to get started.</p>
+                ) : (
+                  <p>No {type} match your search criteria.</p>
+                )}
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  placeholder="Action, Puzzle, etc."
-                  className="bg-secondary/50 border-vault-border"
-                />
-              </div>
-              
-              <Button 
-                onClick={addGameLink} 
-                className="w-full bg-primary hover:bg-primary/90"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Store Game
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Games List */}
-          <Card className="lg:col-span-2 bg-card/90 border-vault-border">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Gamepad2 className="h-5 w-5 text-primary" />
-                  Stored Games
-                </CardTitle>
-                <div className="relative w-64">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search games..."
-                    className="pl-10 bg-secondary/50 border-vault-border"
-                  />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {filteredGames.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <Gamepad2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  {gameLinks.length === 0 ? (
-                    <p>No games stored yet. Add your first game to get started.</p>
-                  ) : (
-                    <p>No games match your search criteria.</p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {filteredGames.map((game) => (
-                    <div
-                      key={game.id}
-                      className="flex items-center justify-between p-4 rounded-lg bg-secondary/30 border border-vault-border hover:bg-secondary/50 transition-colors"
-                    >
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-medium text-foreground">{game.title}</h3>
-                          <Badge variant="outline" className="text-xs border-vault-border">
-                            {game.category}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {game.url}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Stored: {new Date(game.addedAt).toLocaleDateString()}
-                        </p>
+            ) : (
+              <div className="space-y-3">
+                {filteredLinks.map((link) => (
+                  <div
+                    key={link.id}
+                    className="flex items-center justify-between p-4 rounded-lg bg-secondary/30 border border-vault-border hover:bg-secondary/50 transition-colors"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-medium text-foreground">{link.title}</h3>
+                        <Badge variant="outline" className="text-xs border-vault-border">
+                          {link.category}
+                        </Badge>
                       </div>
-                      
-                      <div className="flex items-center gap-2 ml-4">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open(game.url, '_blank')}
-                          className="border-primary/20 hover:bg-primary/10"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeGameLink(game.id)}
-                          className="border-destructive/20 hover:bg-destructive/10 hover:border-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {link.url}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Stored: {new Date(link.addedAt).toLocaleDateString()}
+                      </p>
                     </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+                    
+                    <div className="flex items-center gap-2 ml-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open(link.url, '_blank')}
+                        className="border-primary/20 hover:bg-primary/10"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeWebsiteLink(link.id, type)}
+                        className="border-destructive/20 hover:bg-destructive/10 hover:border-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Categories Overview */}
         {categories.length > 0 && (
-          <Card className="mt-6 bg-card/90 border-vault-border">
+          <Card className="lg:col-span-3 bg-card/90 border-vault-border">
             <CardHeader>
               <CardTitle>Categories Overview</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => {
-                  const count = gameLinks.filter(game => game.category === category).length;
+                  const count = links.filter(link => link.category === category).length;
                   return (
                     <Badge 
                       key={category} 
@@ -292,6 +276,123 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </CardContent>
           </Card>
         )}
+      </div>
+    );
+  };
+
+  const PlaceholderSection = ({ title, description }: { title: string, description: string }) => (
+    <Card className="bg-card/90 border-vault-border">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="text-center py-12 text-muted-foreground">
+          <p>This section is under development.</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  return (
+    <div className="min-h-screen bg-background p-6">
+      {/* Header */}
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Shield className="h-8 w-8 text-primary" />
+              <Lock className="h-4 w-4 text-primary absolute -bottom-1 -right-1" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-mono">
+                VVV
+              </h1>
+              <p className="text-sm text-muted-foreground">Vault Vision Version 1</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+              <Shield className="h-3 w-3 mr-1" />
+              {gameLinks.length + appLinks.length} Links Secured
+            </Badge>
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="border-vault-border hover:bg-destructive/10 hover:border-destructive"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Exit Vault
+            </Button>
+          </div>
+        </div>
+
+        {/* Main Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-6 bg-secondary/50 border border-vault-border">
+            <TabsTrigger value="announcements" className="flex items-center gap-2">
+              <Megaphone className="h-4 w-4" />
+              Announcements
+            </TabsTrigger>
+            <TabsTrigger value="games" className="flex items-center gap-2">
+              <Gamepad2 className="h-4 w-4" />
+              Games
+            </TabsTrigger>
+            <TabsTrigger value="apps" className="flex items-center gap-2">
+              <Smartphone className="h-4 w-4" />
+              Apps
+            </TabsTrigger>
+            <TabsTrigger value="shop" className="flex items-center gap-2">
+              <ShoppingCart className="h-4 w-4" />
+              Shop
+            </TabsTrigger>
+            <TabsTrigger value="policies" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Policies
+            </TabsTrigger>
+            <TabsTrigger value="info" className="flex items-center gap-2">
+              <Info className="h-4 w-4" />
+              Info
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="announcements" className="mt-6">
+            <PlaceholderSection 
+              title="System Announcements" 
+              description="Latest updates and important notices from Vault Vision"
+            />
+          </TabsContent>
+
+          <TabsContent value="games" className="mt-6">
+            <LinkManagementSection links={gameLinks} type="games" />
+          </TabsContent>
+
+          <TabsContent value="apps" className="mt-6">
+            <LinkManagementSection links={appLinks} type="apps" />
+          </TabsContent>
+
+          <TabsContent value="shop" className="mt-6">
+            <PlaceholderSection 
+              title="Vault Shop" 
+              description="Premium features and exclusive content"
+            />
+          </TabsContent>
+
+          <TabsContent value="policies" className="mt-6">
+            <PlaceholderSection 
+              title="Vault Policies" 
+              description="Terms of service, privacy policy, and usage guidelines"
+            />
+          </TabsContent>
+
+          <TabsContent value="info" className="mt-6">
+            <PlaceholderSection 
+              title="Vault Information" 
+              description="Help center, FAQ, and contact information"
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
