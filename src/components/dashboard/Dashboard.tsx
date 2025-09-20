@@ -410,10 +410,23 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </TabsList>
 
           <TabsContent value="announcements" className="mt-6">
-            <PlaceholderSection 
-              title="System Announcements" 
-              description="Latest updates and important notices from Vault Vision"
-            />
+            <Card className="bg-card/90 border-vault-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Megaphone className="h-5 w-5 text-primary" />
+                  System Announcements
+                </CardTitle>
+                <CardDescription>Latest updates and important notices from Vault Vision</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="p-6 bg-primary/5 rounded-lg border border-primary/20">
+                  <h3 className="text-lg font-semibold text-primary mb-3">Welcome to Vault Vision One!</h3>
+                  <p className="text-foreground leading-relaxed">
+                    Welcome, loyal customers! Vault Vision One has officially opened its doors to the public. Since the launch of Nexus, we have been proudly operating and serving our community, continually growing and improving since 2023. Our mission has always been to provide unblocked and safe games for students. We thank you for your continued support and look forward to building even greater experiences together.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="games" className="mt-6">
@@ -421,7 +434,67 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </TabsContent>
 
           <TabsContent value="apps" className="mt-6">
-            <LinkManagementSection links={appLinks} type="apps" />
+            <Card className="bg-card/90 border-vault-border">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <Smartphone className="h-5 w-5 text-primary" />
+                    Apps
+                  </CardTitle>
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder="Search apps..."
+                      className="pl-10 bg-secondary/50 border-vault-border"
+                    />
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {appLinks
+                    .filter(app => 
+                      app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      app.category.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((app) => (
+                    <div key={app.id} className="flex flex-col items-center space-y-2">
+                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-secondary/30 border border-vault-border flex items-center justify-center">
+                        {app.id === "security-scope-1" ? (
+                          <div className="w-full h-full bg-black flex items-center justify-center border border-green-500/30 rounded-lg">
+                            <div className="relative">
+                              <Shield className="h-8 w-8 text-green-500" />
+                              <Lock className="h-3 w-3 text-green-500 absolute -bottom-0.5 -right-0.5" />
+                            </div>
+                          </div>
+                        ) : (
+                          <Smartphone className="h-8 w-8 text-primary" />
+                        )}
+                      </div>
+                      <h3 className="text-sm font-medium text-center text-foreground max-w-full truncate">{app.title}</h3>
+                      <Button 
+                        size="sm"
+                        onClick={() => window.open(app.url, '_blank')}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
+                      >
+                        OPEN
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                {appLinks.filter(app => 
+                  app.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  app.category.toLowerCase().includes(searchTerm.toLowerCase())
+                ).length === 0 && (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Smartphone className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No apps found matching your search.</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="shop" className="mt-6">
