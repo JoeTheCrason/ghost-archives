@@ -190,64 +190,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     const categories = Array.from(new Set(links.map(link => link.category)));
 
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Add New Link */}
-        <Card className="lg:col-span-1 bg-card/90 border-vault-border">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5 text-primary" />
-              Add New {type === 'games' ? 'Game' : 'App'}
-            </CardTitle>
-            <CardDescription>
-              Secure a new unblocked {type === 'games' ? 'game' : 'app'} link
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">{type === 'games' ? 'Game' : 'App'} Title</Label>
-              <Input
-                id="title"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                placeholder={`Enter ${type === 'games' ? 'game' : 'app'} name`}
-                className="bg-secondary/50 border-vault-border"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="url">{type === 'games' ? 'Game' : 'App'} URL</Label>
-              <Input
-                id="url"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-                placeholder="https://..."
-                className="bg-secondary/50 border-vault-border"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-                placeholder={type === 'games' ? "Action, Puzzle, etc." : "Productivity, Social, etc."}
-                className="bg-secondary/50 border-vault-border"
-              />
-            </div>
-            
-            <Button 
-              onClick={() => addWebsiteLink(type)} 
-              className="w-full bg-primary hover:bg-primary/90"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Store {type === 'games' ? 'Game' : 'App'}
-            </Button>
-          </CardContent>
-        </Card>
-
+      <div className="grid grid-cols-1 gap-6">
         {/* Links List */}
-        <Card className="lg:col-span-2 bg-card/90 border-vault-border">
+        <Card className="bg-card/90 border-vault-border">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
@@ -289,19 +234,40 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                           {link.category}
                         </Badge>
                       </div>
-                      {link.id === "security-scope-1" ? (
-                        <div className="mb-2">
-                          <div className="flex items-center gap-2 mb-2 p-3 bg-black rounded-md border border-green-500/30">
+                      {type === 'apps' ? (
+                        link.id === "security-scope-1" ? (
+                          <div className="flex items-center gap-3 p-3 bg-black rounded-md border border-green-500/30">
                             <div className="relative">
-                              <Shield className="h-6 w-6 text-green-500" />
-                              <Lock className="h-3 w-3 text-green-500 absolute -bottom-0.5 -right-0.5" />
+                              <Shield className="h-8 w-8 text-green-500" />
+                              <Lock className="h-4 w-4 text-green-500 absolute -bottom-0.5 -right-0.5" />
                             </div>
-                            <div>
-                              <p className="text-sm font-medium text-green-400">Security Scope</p>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-green-400">{link.title}</p>
                               <p className="text-xs text-green-300">Professional domain security analysis powered by Lightspeed and FortiGuard filtering systems. Instantly verify domain safety and categorization.</p>
                             </div>
+                            <Button 
+                              onClick={() => window.open(link.url, '_blank')}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Open
+                            </Button>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-primary/20 rounded flex items-center justify-center">
+                              <Smartphone className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-foreground">{link.title}</p>
+                            </div>
+                            <Button 
+                              onClick={() => window.open(link.url, '_blank')}
+                              className="bg-primary hover:bg-primary/90"
+                            >
+                              Open
+                            </Button>
+                          </div>
+                        )
                       ) : (
                         <p className="text-sm text-muted-foreground truncate">
                           {link.url}
@@ -339,8 +305,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         </Card>
 
         {/* Categories Overview */}
-        {categories.length > 0 && (
-          <Card className="lg:col-span-3 bg-card/90 border-vault-border">
+        {type === 'games' && categories.length > 0 && (
+          <Card className="bg-card/90 border-vault-border">
             <CardHeader>
               <CardTitle>Categories Overview</CardTitle>
             </CardHeader>
